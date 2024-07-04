@@ -1,6 +1,7 @@
 package Tlegen.com;
 
-import Tlegen.com.controller.DAO.impl.OrderDetailDaoRealization;
+import Tlegen.com.controller.DAO.impl.OrderDetailDaoImpl;
+import Tlegen.com.controller.DAO.impl.OrderDetailDaoImpl;
 import Tlegen.com.model.entity.OrderDetail;
 
 import java.util.List;
@@ -8,8 +9,6 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        List<OrderDetail> orderDetails = OrderDetailDaoRealization.readAll();
-
-        System.out.println(orderDetails);
+OrderDetailDaoImpl.(2);
     }
 }

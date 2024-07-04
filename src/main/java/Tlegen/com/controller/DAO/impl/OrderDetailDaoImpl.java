@@ -1,54 +1,48 @@
 package Tlegen.com.controller.DAO.impl;
 
 import Tlegen.com.connection.DatabaseConfig;
-import Tlegen.com.controller.DAO.ProductDao;
+import Tlegen.com.controller.DAO.OrderDetailDao;;
 import Tlegen.com.model.entity.OrderDetail;
-import Tlegen.com.model.entity.Product;
-
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDaoImpl implements ProductDao {
+public class OrderDetailDaoImpl implements OrderDetailDao {
 
-    private static final String INSERT_INTO = "INSERT INTO Product(id, name, quantity, available, price, productCategories) VALUES(?,?,?,?,?,?)";
-    private static final String SELECT_ALL = "SELECT * FROM Product";
-    private static final String UPDATE = "UPDATE Product SET name = ? WHERE id = ?";
-    private static final String DELETE = "DELETE FROM Product WHERE id = ?";
-    private static final String deleteReferencingRecordsSql = "DELETE FROM orderdetail_product WHERE product_id = ?";
+    private static final String INSERT_INTO = "INSERT INTO OrderDetail(id, order_status, total_amount) VALUES (?,?,?)";
+    private static final String SELECT_ALL = "SELECT * FROM OrderDetail";
+    private static final String UPDATE = "UPDATE OrderDetail SET order_status = ? WHERE id = ?";
+    private static final String DELETE = "DELETE FROM OrderDetail WHERE id = ?";
+    private static final String deleteReferencingRecordsSql = "DELETE FROM orderdetail_product WHERE orderdetail_id = ?";
 
     private static String url = DatabaseConfig.getDbUrl();
     private static String user = DatabaseConfig.getDbUser();
     private static String password = DatabaseConfig.getDbPassword();
 
-
     @Override
-    public List<Product> create(Product product) {
-        List<Product> products = new ArrayList<>();
+    public List<OrderDetail> create(OrderDetail orderDetail) {
+        List<OrderDetail> orderDetails = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(url, user, password);) {
             System.out.println("Соединение установленно");
-
             try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
 
-                preparedStatement.setInt(1, product.getId());
-                preparedStatement.setString(2, product.getName());
-                preparedStatement.setBoolean(3, product.isAvailable());
-                preparedStatement.setDouble(4, product.getPrice());
+                preparedStatement.setInt(1, orderDetail.getId());
+                preparedStatement.setString(2, orderDetail.getOrderStatus());
+                preparedStatement.setDouble(3, orderDetail.getTotalAmount());
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Не удалось подключиться к базе данных: " + e.getMessage());
         }
-        return products;
+        return orderDetails;
     }
 
-
     @Override
-    public List<Product> readAll() {
-        List<Product> products = new ArrayList<>();
+    public List<OrderDetail> readAll() {
+        List<OrderDetail> orderDetails = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(url, user, password);) {
             System.out.println("Соединение установленно");
@@ -58,31 +52,29 @@ public class ProductDaoImpl implements ProductDao {
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("id");
-                    String name = rs.getString("name");
-                    int quantity = rs.getInt("quantity");
-                    boolean available = rs.getBoolean("available");
-                    double price = rs.getDouble("price");
+                    String orderStatus = rs.getString("order_status");
+                    double totalAmount = rs.getDouble("total_amount");
 
-                    products.add(new Product(id, name, quantity, available, price));
+                    orderDetails.add(new OrderDetail(id, orderStatus, totalAmount));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Не удалось подключиться к базе данных: " + e.getMessage());
         }
-        return products;
+        return orderDetails;
     }
 
     @Override
-    public List<Product> update(int id, String name) {
-        List<Product> updateProduct = new ArrayList<>();
+    public List<OrderDetail> update(int id, String orderStatus) {
+        List<OrderDetail> updateorderDetails = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(url, user, password);) {
             System.out.println("Соединение установленно");
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
 
-                preparedStatement.setString(1, name);
+                preparedStatement.setString(1, orderStatus);
                 preparedStatement.setInt(2, id);
                 preparedStatement.executeUpdate();
             }
@@ -90,30 +82,30 @@ public class ProductDaoImpl implements ProductDao {
             e.printStackTrace();
             System.out.println("Не удалось подключиться к базе данных: " + e.getMessage());
         }
-        return updateProduct;
+        return updateorderDetails;
     }
 
     @Override
     public boolean delete(int Id) {
-        boolean deleteProduct = false;
+        boolean deleteOrderDetail = false;
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Connection established");
+            System.out.println("Соединение установленно");
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(deleteReferencingRecordsSql)) {
                 preparedStatement.setInt(1, Id);
                 preparedStatement.executeUpdate();
             }
 
-            String DELETE = "DELETE FROM orderdetail WHERE id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
                 preparedStatement.setInt(1, Id);
-                deleteProduct = preparedStatement.executeUpdate() > 0;
+                deleteOrderDetail = preparedStatement.executeUpdate() > 0;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Не удалось подключиться к базе данных: " + e.getMessage());
         }
-        return deleteProduct;
+        return deleteOrderDetail;
     }
 }
+

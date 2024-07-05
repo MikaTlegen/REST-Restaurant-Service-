@@ -10,7 +10,7 @@ public interface Service<T> {
 
     T readId(int id);
 
-    T update(int id, String k);
+    T update(T t);
 
     boolean delete(int id);
 

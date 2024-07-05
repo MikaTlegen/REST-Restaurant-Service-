@@ -1,10 +1,8 @@
 package Tlegen.com.DAO.impl;
 
-import Tlegen.com.db.DatabaseConfig;
 import Tlegen.com.DAO.ProductDao;
-import Tlegen.com.entity.OrderDetail;
+import Tlegen.com.db.DatabaseConfig;
 import Tlegen.com.entity.Product;
-
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ public class ProductDaoImpl implements ProductDao {
     private static final String INSERT_INTO = "INSERT INTO Product(id, name, quantity, available, price, productCategories) VALUES(?,?,?,?,?,?)";
     private static final String SELECT_ALL = "SELECT * FROM Product";
     private static final String SELECT_BY_ID = "SELECT * FROM OrderDetail WHERE id = ?";
-    private static final String UPDATE = "UPDATE Product SET name = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE Product SET name = ?, quantity = ?, available = ?, price = ? WHERE id = ?\n";
     private static final String DELETE = "DELETE FROM Product WHERE id = ?";
     private static final String deleteReferencingRecordsSql = "DELETE FROM orderdetail_product WHERE product_id = ?";
 
@@ -85,7 +83,7 @@ public class ProductDaoImpl implements ProductDao {
 
                 ResultSet rs = preparedStatement.executeQuery();
                 if (rs.next()) {
-                    int productId = rs.getInt("id");
+                    id = rs.getInt("id");
                     String name = rs.getString("name");
                     int quantity = rs.getInt("quantity");
                     boolean available = rs.getBoolean("available");
@@ -103,23 +101,32 @@ public class ProductDaoImpl implements ProductDao {
 
 
     @Override
-    public Product update(int id, String name) {
+    public Product update(Product product) {
         Product updatedProduct = null;
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             System.out.println("Соединение установленно");
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
-                preparedStatement.setString(1, name);
-                preparedStatement.setInt(2, id);
+                preparedStatement.setDouble(1, product.getPrice());
+                preparedStatement.setBoolean(2, product.isAvailable());
+                preparedStatement.setInt(3, product.getQuantity());
+                preparedStatement.setString(4, product.getName());
+                preparedStatement.setInt(5, product.getId());
                 preparedStatement.executeUpdate();
+            }
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        id = resultSet.getInt("id");
-                        name = resultSet.getString("name");
+            try (PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL)) {
+                selectStatement.setInt(1, product.getId());
+                try (ResultSet rs = selectStatement.executeQuery()) {
+                    if (rs.next()) {
+                        int id = rs.getInt("id");
+                        String name = rs.getString("name");
+                        int quantity = rs.getInt("quantity");
+                        boolean available = rs.getBoolean("available");
+                        double price = rs.getDouble("price");
 
-                        updatedProduct = new Product(id, name);
+                        updatedProduct = new Product(id, name, quantity, available, price);
                     }
                 }
             }

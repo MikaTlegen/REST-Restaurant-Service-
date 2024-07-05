@@ -1,7 +1,5 @@
 package Tlegen.com.DAO;
 
-import Tlegen.com.entity.OrderDetail;
-
 import java.util.List;
 
 public interface DAO<T, N> {
@@ -11,7 +9,7 @@ public interface DAO<T, N> {
 
     T readById(int id);
 
-    T update(int n, String m);
+    T update(T t);
 
     boolean delete(int n);
 

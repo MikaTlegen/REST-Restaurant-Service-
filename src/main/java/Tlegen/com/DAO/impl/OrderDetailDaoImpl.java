@@ -14,7 +14,7 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
     private static final String INSERT_INTO = "INSERT INTO OrderDetail(id, order_status, total_amount) VALUES (?,?,?)";
     private static final String SELECT_ALL = "SELECT * FROM OrderDetail";
     private static final String SELECT_BY_ID = "SELECT * FROM OrderDetail WHERE id = ?";
-    private static final String UPDATE = "UPDATE OrderDetail SET order_status = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE OrderDetail SET order_status = ?, total_amount=?  WHERE id = ?";
     private static final String DELETE = "DELETE FROM OrderDetail WHERE id = ?";
     private static final String deleteReferencingRecordsSql = "DELETE FROM orderdetail_product WHERE orderdetail_id = ?";
 
@@ -94,23 +94,29 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
     }
 
     @Override
-    public OrderDetail update(int id, String orderStatus) {
+    public OrderDetail update(OrderDetail orderDetail) {
         OrderDetail updatedOrderDetail = null;
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             System.out.println("Соединение установленно");
 
+            // Используем PreparedStatement для выполнения запроса на обновление
             try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
-                preparedStatement.setString(1, orderStatus);
-                preparedStatement.setInt(2, id);
+                preparedStatement.setDouble(1, orderDetail.getTotalAmount());
+                preparedStatement.setString(2, orderDetail.getOrderStatus());
+                preparedStatement.setInt(3, orderDetail.getId());
                 preparedStatement.executeUpdate();
+            }
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL)) {
+                selectStatement.setInt(1, orderDetail.getId());
+                try (ResultSet resultSet = selectStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        id = resultSet.getInt("id");
-                        orderStatus = resultSet.getString("order_status");
-                        // Создаем и возвращаем обновленный объект OrderDetail
-                        updatedOrderDetail = new OrderDetail(id, orderStatus);
+                        int id = resultSet.getInt("id");
+                        String orderStatus = resultSet.getString("order_status");
+                        double totalAmount = resultSet.getDouble("total_amount");
+
+                        updatedOrderDetail = new OrderDetail(id, orderStatus, totalAmount);
                     }
                 }
             }
@@ -121,6 +127,7 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 
         return updatedOrderDetail;
     }
+
 
 
     @Override

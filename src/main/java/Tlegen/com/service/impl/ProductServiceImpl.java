@@ -6,7 +6,6 @@ import Tlegen.com.service.ProductService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.print.PrintService;
 import java.util.List;
 
 
@@ -40,9 +39,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(int id, String name) {
+    public Product update(Product product) {
         try {
-            return productDao.update(id, name);
+            return productDao.update(product);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при обновлении OrderDetail", e);
         }

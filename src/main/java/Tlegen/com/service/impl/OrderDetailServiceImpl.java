@@ -42,9 +42,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public OrderDetail update(int id, String orderStatus) {
+    public OrderDetail update(OrderDetail orderDetail) {
         try {
-            return orderDetailDao.update(id, orderStatus);
+            return orderDetailDao.update(orderDetail);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при обновлении OrderDetail", e);
         }

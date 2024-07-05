@@ -33,10 +33,6 @@ public class Product {
         this.orderDetail = orderDetail;
     }
 
-    public Product(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     @Override
     public String toString() {

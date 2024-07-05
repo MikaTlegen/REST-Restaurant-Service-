@@ -1,4 +1,4 @@
-package Tlegen.com.model.entity;
+package Tlegen.com.entity;
 
 //OneToMany: Orderdetail -> Product
 

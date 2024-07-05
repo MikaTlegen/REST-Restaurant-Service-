@@ -1,4 +1,4 @@
-package Tlegen.com.model.entity;
+package Tlegen.com.entity;
 
 import lombok.*;
 
@@ -25,6 +25,11 @@ public class OrderDetail {
 
     public OrderDetail() {
         this.products = new ArrayList<>();
+    }
+
+    public OrderDetail(int id, String orderStatus) {
+        this.id = id;
+        this.orderStatus = orderStatus;
     }
 
     public void addProduct(Product product) {

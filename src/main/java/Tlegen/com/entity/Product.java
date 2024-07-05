@@ -1,4 +1,4 @@
-package Tlegen.com.model.entity;
+package Tlegen.com.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +31,11 @@ public class Product {
         this.available = available;
         this.price = price;
         this.orderDetail = orderDetail;
+    }
+
+    public Product(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override

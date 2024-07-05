@@ -1,10 +1,7 @@
-package Tlegen.com.connection;
-import org.junit.Assert;
+package Tlegen.com.db;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -6,9 +6,9 @@ public interface Service<T> {
 
     T create(T t);
 
-    List<T> read();
+    List<T> getAll();
 
-    T readId(int id);
+    T get(int id);
 
     T update(T t);
 

@@ -3,11 +3,13 @@ package Tlegen.com.controller;
 import Tlegen.com.entity.Product;
 import Tlegen.com.service.ProductService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
+
 
 @Path("/product")
 public class ProductController {
@@ -19,42 +21,60 @@ public class ProductController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") int id) {
-        Product product = productService.readId(id);
-        if (product != null)
+        try {
+            Product product = productService.get(id);
+            if (product == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Product not found").build();
+            }
             return Response.ok(product).build();
-        return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<Product> products = productService.read();
-        return Response.ok(products).build();
+        try {
+            List<Product> products = productService.getAll();
+            return Response.ok(products).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(Product product, @Context UriInfo uriInfo) {
-        int id = productService.create(product).getId();
-
-        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
-        uriBuilder.path(Integer.toString(id));
-        return Response.created(uriBuilder.build()).build();
+    public Response create(Product product) {
+        try {
+            int id = productService.create(product).getId();
+            return Response.created(URI.create("/product/" + id)).entity(product).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(Product productToUpdate, @PathParam("id") int id) {
-        productService.update(productToUpdate);
-        return Response.ok().build();
+        try {
+            productService.update(productToUpdate);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
     }
 
     @DELETE
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") int id) {
-        productService.delete(id);
-        return Response.noContent().build();
+        try {
+            productService.delete(id);
+            return Response.noContent().build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
     }
 }

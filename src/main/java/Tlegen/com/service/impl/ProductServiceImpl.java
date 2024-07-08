@@ -25,12 +25,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> read() {
+    public List<Product> getAll() {
         return productDao.read();
     }
 
     @Override
-    public Product readId(int id) {
+    public Product get(int id) {
         Product detail = productDao.readById(id);
         if (detail == null) {
             throw new IllegalArgumentException("Информация о заказе не найдена");

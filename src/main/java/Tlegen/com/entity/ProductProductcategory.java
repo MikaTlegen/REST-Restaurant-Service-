@@ -9,6 +9,7 @@ import lombok.*;
 @Getter @Setter
 @ToString
 public class ProductProductcategory {
-    private int product_id;
-    private int productcategory_id;
+    private int productProductcategoryId;
+    private int productId;
+    private int categoryId;
 }

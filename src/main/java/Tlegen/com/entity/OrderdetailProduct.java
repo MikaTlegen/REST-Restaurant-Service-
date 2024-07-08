@@ -9,6 +9,7 @@ import lombok.*;
 @Getter @Setter
 @ToString
 public class OrderdetailProduct {
+    private int orderdetailProductId;
     private int orderdetailId;
     private int productId;
 }

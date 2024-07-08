@@ -3,6 +3,7 @@ package Tlegen.com.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter @Setter
+@ToString
 public class ProductCategory {
 
     private Integer id;
@@ -27,13 +29,4 @@ public class ProductCategory {
         product.addProductCategory(this);
     }
 
-    @Override
-    public String toString() {
-        return "ProductCategory{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", products=" + products +
-                "}/n";
-    }
 }

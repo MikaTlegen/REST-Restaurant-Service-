@@ -8,6 +8,12 @@
   <name>JDBCProject Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet -->
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <version>3.1.5</version>
+    </dependency>
 
 
     <dependency>
@@ -111,6 +117,12 @@
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.orhanobut/logger -->
+    <dependency>
+      <groupId>com.orhanobut</groupId>
+      <artifactId>logger</artifactId>
+      <version>2.2.0</version>
     </dependency>
 
 

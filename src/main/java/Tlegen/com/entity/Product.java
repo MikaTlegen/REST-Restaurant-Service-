@@ -1,9 +1,6 @@
 package Tlegen.com.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
+@ToString
 public class Product {
 
     private int id;
@@ -25,26 +23,11 @@ public class Product {
     private OrderDetail orderDetail;
 
     public Product(int id, String name, int quantity, boolean available, double price) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.available = available;
-        this.price = price;
-        this.orderDetail = orderDetail;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", quantity=" + quantity +
-                ", available=" + available +
-                ", price=" + price +
-                ", productCategories=" + productCategories +
-                ", orderDetail=" + orderDetail +
-                "}/n";
+    this.id = id;
+    this.name = name;
+    this.quantity = quantity;
+    this.available = available;
+    this.price = price;
     }
 
     public void addProductCategory(ProductCategory productCategory) {

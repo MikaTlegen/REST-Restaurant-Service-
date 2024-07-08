@@ -3,7 +3,6 @@ package Tlegen.com.service.impl;
 import Tlegen.com.DAO.OrderDetailDao;
 import Tlegen.com.entity.OrderDetail;
 import Tlegen.com.service.OrderDetailService;
-import Tlegen.com.service.Service;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,12 +27,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public List<OrderDetail> read() {
+    public List<OrderDetail> getAll() {
         return orderDetailDao.read();
     }
 
     @Override
-    public OrderDetail readId(int id) {
+    public OrderDetail get(int id) {
         OrderDetail detail = orderDetailDao.readById(id);
         if (detail == null) {
             throw new IllegalArgumentException("Информация о заказе не найдена");
